@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: manual-rabbitmq
+  namespace: default
+spec:
+  ports:
+  - port: 5672
+    name: amqp
+    targetPort: 5672
+  - port: 15672
+    name: management
+    targetPort: 15672
+  selector:
+    app: manual-rabbitmq
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manual-rabbitmq
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: manual-rabbitmq
+  template:
+    metadata:
+      labels:
+        app: manual-rabbitmq
+    spec:
+      containers:
+      - name: rabbitmq
+        # 使用官方镜像，3.8 版本与 funcx 0.3.x 时代兼容性最好
+        image: rabbitmq:3.8-management 
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+        env:
+        # 设置默认用户名密码，与 funcx values.yaml 保持一致
+        - name: RABBITMQ_DEFAULT_USER
+          value: "funcx"
+        - name: RABBITMQ_DEFAULT_PASS
+          value: "rabbitmq"

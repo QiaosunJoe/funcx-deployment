@@ -1,0 +1,15 @@
+dependencies:
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 9.1.4
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 10.7.17
+- name: rabbitmq
+  repository: https://charts.bitnami.com/bitnami
+  version: 8.11.6
+- name: funcx_endpoint
+  repository: http://funcx.org/funcx-helm-charts
+  version: 0.3.4
+digest: sha256:b738634a576632650fd711ec622dcbf636b00b9c3254ab96ad1f7e6d895ebfe1
+generated: "2022-01-07T22:20:06.709346829Z"

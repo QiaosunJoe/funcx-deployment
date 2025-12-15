@@ -1,0 +1,71 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: funcx-prod
+  region: us-east-1
+
+cloudWatch:
+  clusterLogging:
+    # enable specific types of cluster control plane logs
+    enableTypes: ["all"]
+
+vpc:
+  id: vpc-0d3b9f7c3a9c6c1ba
+  subnets:
+    public:
+      us-east-1a:
+        id: subnet-0c0d6b32bb57c39b2
+      us-east-1b:
+        id: subnet-0906da1c44cbe3b8d
+    private:
+      us-east-1a:
+        id: subnet-0e79de4daf8cf321f
+      us-east-1b:
+        id: subnet-0d10f5ed0f8099b91
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: aws-load-balancer-controller
+        namespace: kube-system
+      wellKnownPolicies:
+        awsLoadBalancerController: true
+        certManager: true
+        externalDNS: true
+    - metadata:
+        name: funcx-service
+        namespace: default
+      attachPolicy:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: S3Access
+            Effect: Allow
+            Action: 
+              - s3:PutObject
+              - s3:GetObject
+              - s3:ListObject
+            Resource: arn:aws:s3:::funcx-production-task-storage/*
+
+addons:
+  - name: vpc-cni
+
+nodeGroups:
+  - name: funcx-prod-node-group
+    instanceType: c5.large
+    desiredCapacity: 2
+    volumeSize: 20
+    ssh:
+      publicKeyName: funcx-eks
+      enableSsm: true
+    availabilityZones:
+      - us-east-1a
+      - us-east-1b
+    iam:
+      withAddonPolicies:
+        autoScaler: true
+        externalDNS: true
+        certManager: true
+        albIngress: true
+        cloudWatch: true
