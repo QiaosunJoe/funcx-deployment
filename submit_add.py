@@ -33,8 +33,8 @@ except Exception as e:
     exit(1)
 
 # 4. 提交任务
-# endpoint_id = "2cc6b8ac-6f12-444b-818f-dc00553b4222" # ep_test  (LocalProvider)
-endpoint_id = "96e12e24-6d29-4fd6-8c12-d9fe97c437ab" # ep_slurm (SlurmProvider)
+endpoint_id = "2cc6b8ac-6f12-444b-818f-dc00553b4222" # ep_test  (LocalProvider)
+# endpoint_id = "96e12e24-6d29-4fd6-8c12-d9fe97c437ab" # ep_slurm (SlurmProvider)
 
 a, b = 3, 8
 print(f"Submitting task to Endpoint: {endpoint_id}")
